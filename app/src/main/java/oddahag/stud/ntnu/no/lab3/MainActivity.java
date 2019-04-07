@@ -24,7 +24,7 @@ import android.media.AudioManager;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
     public static final int RESULT_CODE = 0;
-    private static int MIN_ACC;
+    private static int MIN_ACC = 5;
     private double first = 0;
     private double second = 0;
     private double third = 0;
@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == RESULT_CODE){
             if (resultCode == Activity.RESULT_OK){
+                Intent i = new Intent();
                 Bundle b = data.getExtras();
                 String temp = b.get(SettingsActivity.SENSITIVITY).toString();
                 MIN_ACC = Integer.parseInt(temp);

@@ -13,14 +13,16 @@ import android.widget.SeekBar;
 import java.net.Inet4Address;
 import java.nio.channels.InterruptedByTimeoutException;
 
+import static java.sql.Types.NULL;
+
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String SENSITIVITY = "selected_sense";
-    private String sendValue;
-    private static final String S1 = "10";
-    private static final String S2 = "20";
-    private static final String S3 = "30";
-    private static final String S4 = "40";
+    private String sendValue = "5";
+    private static final String S1 = "5";
+    private static final String S2 = "10";
+    private static final String S3 = "15";
+    private static final String S4 = "20";
     private Button backButton;
     private SeekBar seekBar;
 
@@ -38,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 int temp = seekBar.getProgress();
+
                 switch (temp){
                     case 0:
                         sendValue = S1;
@@ -82,6 +85,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         b.putString(SENSITIVITY, sendValue);
         i.putExtras(b);
+
+
         setResult(Activity.RESULT_OK, i);
         finish();
     }
