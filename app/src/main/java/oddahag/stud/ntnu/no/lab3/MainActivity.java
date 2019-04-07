@@ -1,6 +1,8 @@
 package oddahag.stud.ntnu.no.lab3;
 
 import android.app.Activity;
+import android.media.AudioAttributes;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -16,6 +18,8 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.DoubleToIntFunction;
+import android.media.SoundPool;
+import android.media.AudioManager;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     ArrayList<Double> al = new ArrayList<Double>();
 
     private TextView p1, p2, p3;
+    private SoundPool soundPool;
+    private int sound;
 
     // What to do when the sensor catches movement
     @Override
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         try {
             Thread.sleep(ms.intValue());
             //make sound
+            soundPool.play(sound, 1,1,0,0, 1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -100,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         p2.setText(Double.toString(second));
         p3.setText(Double.toString(third));
 
-
         // initiate button to settings
         Button settingsButton;
         settingsButton = findViewById(R.id.settingsButton);
@@ -110,6 +116,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 openSettings();
             }
         });
+
+        // sound for the ball when its on top
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(6)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        } else {
+            soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        }
+        sound = soundPool.load(this,R.raw.ballsound,1);
 
     }
 
